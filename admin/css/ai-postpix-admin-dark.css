@@ -1,0 +1,283 @@
+/* ADMIN PANEL DARK CSS */
+
+
+/* Ana stil ayarları */
+#postpixadmin .wrap {
+  font-family: 'Poppins', sans-serif;
+  color: #c8cacf;
+}
+
+#postpixadmin .notice {
+  background: #5c32fb;
+  border: 2px solid #7337f7;
+}
+
+#postpixadmin .logo {
+  background-image: url("../../img/postpixlogo.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0px;
+  margin: 0px;
+  width: 238px;
+  height: 50px;
+  margin-top: 20px;
+}
+
+/* Başlık Stilleri */
+#postpixadmin .wrap h1 {
+  color: #6a40b6;
+  margin-top: 10px;
+  font-size: 25px;
+  font-weight: 500;
+  padding-top: 20px;
+}
+
+#postpixadmin .wrap p {
+  margin-left: 2px;
+}
+
+/* Form Stilleri */
+#postpixadmin .postpix-settings-form {
+  background-color: #0a0f1f;
+  padding: 20px;
+  border-radius: 7px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Input Stilleri */
+#postpixadmin .postpix-settings-form input[type="text"] {
+  border-radius: 7px;
+  padding: 10px;
+  width: 250px;
+  box-sizing: border-box;
+  border: 2px solid #7337f7;
+  background-color: #160b27;
+  color: #ceb8ff;
+  font-weight: 500;
+}
+
+#postpixadmin .postpix-settings-form input[type="submit"] {
+  border-radius: 7px;
+  padding: 10px;
+  width: 250px;
+  box-sizing: border-box;
+}
+
+/* Buton Stilleri */
+#postpixadmin .wrap .button {
+  transition: all 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+  background: linear-gradient(135deg, #4d2efe 0%, #7a39f6 100%);
+  color: white;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+#postpixadmin .wrap .button:hover {
+  opacity: 0.9;
+}
+
+#postpixadmin .form-table input[type="radio"] {
+  margin: 0 10px 0 0;
+  background-color: #f7efff;
+}
+
+#postpixadmin #error-notification {
+  background-color: #dc3232;
+  color: white;
+  padding: 10px;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+
+#postpixadmin #test-api-section {
+  padding-top: 20px;
+}
+
+#postpixadmin #test_api_button {
+  transition: all 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+  background: linear-gradient(135deg, #4d2efe 0%, #7a39f6 100%);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 7px;
+  position: absolute;
+  margin-left: 500px;
+  margin-top: 22px;
+}
+
+#postpixadmin #aipstx_test_openai_button {
+  transition: all 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+  background: linear-gradient(135deg, #4d2efe 0%, #7a39f6 100%);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 7px;
+  position: absolute;
+  margin-left: 500px;
+  margin-top: 106px;
+}
+
+#postpixadmin #test_api_button:hover,
+#postpixadmin #aipstx_test_openai_button:hover {
+  opacity: 0.9;
+}
+
+#postpixadmin .form-table th {
+  color: #b18dff;
+  padding: 20px 10px;
+}
+
+#postpixadmin .form-table td {
+  padding: 15px 10px;
+}
+
+#postpixadmin #loading-gif {
+  text-align: center;
+  padding: 20px;
+}
+
+#postpixadmin #loading-gif img {
+  max-width: 100px;
+  height: auto;
+}
+
+#aipstx_edenai_key,
+#aipstx_openai_key {
+  display: inline-block;
+  width: calc(100% - 270px);
+}
+
+#postpixadmin .wrap a {
+  color: #892eff;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: all 0.5s ease;
+}
+
+#postpixadmin .wrap a:hover {
+  color: #c78aff;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.admin-left {
+  display: flex;
+  flex-direction: column;
+  min-width: 900px;
+}
+
+.admin-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 580px;
+  overflow: auto;
+  position: relative;
+}
+
+.admin-right h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #7a39f6;
+  text-shadow: 0 0 3px #6d13e2;
+  transform: translateX(30%);
+}
+
+.admin-right ul {
+  counter-reset: index;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 540px;
+  margin-left: 20px;
+}
+
+.admin-right li {
+  counter-increment: index;
+  padding: 12px 12px 20px 12px;
+  box-sizing: border-box;
+  background: #1c0642;
+  border-radius: 7px;
+  box-shadow: 0 0 3px #6d13e2;
+  border: none;
+  color: #b18dff;
+  font-size: 12px;
+  flex: 0 0 calc(50% - 10px);
+  max-width: 250px;
+}
+
+.admin-right li::before {
+  content: counters(index, ".", decimal-leading-zero);
+  font-size: 25px;
+  text-align: right;
+  font-weight: bold;
+  min-width: 50px;
+  padding-right: 12px;
+  font-variant-numeric: tabular-nums;
+  align-self: flex-start;
+  background-image: linear-gradient(to bottom, #7a39f6, #7337f7);
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.admin-right li span {
+  color: #ebdcff;
+  flex-basis: 100%;
+  font-weight: 500;
+}
+
+.admin-right .spacer {
+  display: block;
+  margin-top: 5px;
+}
+
+.admin-right::-webkit-scrollbar {
+  width: 10px;
+}
+
+.admin-right::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.admin-right::-webkit-scrollbar-thumb {
+  background: #7337f7;
+  border-radius: 5px;
+}
+
+.admin-right::-webkit-scrollbar-thumb:hover {
+  background: #5c2edc;
+}
+
+.admin-right {
+  scrollbar-width: thin;
+  scrollbar-color: #7337f7 #f8f8f8;
+}
+
+
+#scrollButton {
+  position: sticky;
+  bottom: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #7337f7;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 10;
+  left: 50%;
+  transform: translateX(-50%);
+}
