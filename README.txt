@@ -1,5 +1,5 @@
 ===AI Postpix: Let AI Find the Best Image Prompts for Your Posts and Create Images!===
-Contributors: muzip, freemius
+Contributors: muzip
 Tags: AI, image, featured, image generator, openai
 Requires at least: 5.0.0
 Tested up to: 6.4
