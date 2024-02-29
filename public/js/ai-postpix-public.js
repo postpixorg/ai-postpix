@@ -126,68 +126,84 @@ jQuery(document).ready(function ($) {
 	var imageNumberDiv = $('.numberimages');
 	var imageCountSelector = $('#postpix_image_count');
 
-	function updateEngineAndResolutionOptions() {
-		var selectedEngine = engineSelector.val();
-		var selectedResolution = resolutionSelector.val();
+function updateEngineAndResolutionOptions() {
+    var selectedEngine = engineSelector.val();
+    var selectedResolution = resolutionSelector.val();
 
-		// OpenAI, StabilityAi ve DALL-E 3 seçildiğinde Number of Images kısmını göster
-		if (selectedEngine === 'openai' || selectedEngine === 'stabilityai' || selectedEngine === 'dall-e3') {
-			imageNumberDiv.show();
-		} else {
-			imageNumberDiv.hide();
-		}
+    // Select elementini ve içindeki option'ları disable yapma ve sınıf ekleme
+    function disableSelect(selector, disable) {
+        $(selector).prop('disabled', disable);
+        if (disable) {
+            $(selector).addClass('disabled-select');
+        } else {
+            $(selector).removeClass('disabled-select');
+        }
+    }
 
-		// DALL-E 3 seçildiğinde 256x256 ve 512x512 çözünürlükleri gizle
-		if (selectedEngine === 'dall-e3') {
-			resolutionSelector.find('option[value="256x256"]').hide();
-			resolutionSelector.find('option[value="512x512"]').hide();
-			imageCountSelector.find('option').each(function () {
-				if (parseInt($(this).val()) > 6) {
-					$(this).hide();
-				} else {
-					$(this).show();
-				}
-			});
+    // Option'ları disable yapma ve sınıf ekleme
+    function disableOption(selector, disable) {
+        $(selector).prop('disabled', disable);
+        if (disable) {
+            $(selector).addClass('disabled-option');
+        } else {
+            $(selector).removeClass('disabled-option');
+        }
+    }
 
-			if (selectedResolution === '256x256' || selectedResolution === '512x512') {
-				resolutionSelector.val(resolutionSelector.find("option:first").val());
-			}
-		} else {
-			resolutionSelector.find('option').show();
-			imageCountSelector.find('option').show();
-		}
+    // Image Number Div kontrolü
+    if (['openai', 'stabilityai', 'dall-e3', 'deepai'].includes(selectedEngine)) {
+        disableSelect(imageNumberDiv.find('select'), false);
+    } else {
+        disableSelect(imageNumberDiv.find('select'), true);
+    }
 
-		// 256x256 veya 512x512 seçildiğinde DALL-E 3 motor seçeneğini gizle
-		if (selectedResolution === '256x256' || selectedResolution === '512x512') {
-			engineSelector.find('option[value="dall-e3"]').hide();
-			if (selectedEngine === 'dall-e3') {
-				engineSelector.val(engineSelector.find("option:first").val());
-			}
-		} else {
-			engineSelector.find('option').show();
-		}
+    // DALL-E 3 seçildiğinde 256x256 ve 512x512 çözünürlükleri disable yap
+    if (selectedEngine === 'dall-e3') {
+        disableOption(resolutionSelector.find('option[value="256x256"], option[value="512x512"]'), true);
+    } else {
+        disableOption(resolutionSelector.find('option'), false);
+    }
 
-		// Eğer Stable Diffusion seçildiyse, 256x256 seçeneğini kaldır
-		if (selectedEngine === 'stabilityai') {
-			resolutionSelector.find('option[value="256x256"]').hide();
-			if (selectedResolution === '256x256') {
-				resolutionSelector.val(resolutionSelector.find("option:first").val());
-			}
-		} else if (selectedEngine !== 'dall-e3') { // DALL-E 3 için özel durum
-			resolutionSelector.find('option[value="256x256"]').show();
-		}
+    // DeepAI seçildiğinde 1024x1024 disable yap ve 512x512 hariç diğer çözünürlükleri etkinleştir
+    if (selectedEngine === 'deepai') {
+        disableOption(resolutionSelector.find('option[value="1024x1024"]'), true); // 1024x1024'ü disable yap
+        disableOption(resolutionSelector.find('option[value="256x256"], option[value="512x512"]'), false); // 256x256 ve 512x512'yi etkinleştir
+    } else {
+        disableOption(resolutionSelector.find('option[value="1024x1024"]'), false); // DeepAI seçili değilse 1024x1024'ü etkinleştir
+    }
 
-		// Eğer 256x256 seçildiyse, Stable Diffusion seçeneğini kaldır
-		if (selectedResolution === '256x256') {
-			engineSelector.find('option[value="stabilityai"]').hide();
-			if (selectedEngine === 'stabilityai') {
-				engineSelector.val(engineSelector.find("option:first").val());
-			}
-		} else if (selectedResolution !== '512x512') { // 512x512 için özel durum
-			engineSelector.find('option[value="stabilityai"]').show();
-		}
-	}
+    // 1024x1024 seçildiğinde DeepAI'yi disable yap
+    if (selectedResolution === '1024x1024') {
+        disableOption(engineSelector.find('option[value="deepai"]'), true);
+    } else {
+        disableOption(engineSelector.find('option[value="deepai"]'), false);
+    }
 
+    // Image Count Selector için max sınırı DALL-E 3 için 6'ya ayarlama
+    if (selectedEngine === 'dall-e3') {
+        imageCountSelector.find('option').each(function () {
+            if (parseInt($(this).val()) > 6) {
+                disableOption($(this), true);
+            } else {
+                disableOption($(this), false);
+            }
+        });
+    } else {
+        imageCountSelector.find('option').prop('disabled', false).removeClass('disabled-option');
+    }
+
+    // 256x256 seçildiğinde sadece DALL-E 3'ü disable yap
+    if (selectedResolution === '256x256') {
+        disableOption(engineSelector.find('option[value="dall-e3"]'), true);
+    } else {
+        disableOption(engineSelector.find('option[value="dall-e3"]'), false);
+    }
+
+    // DeepAI seçiliyken ve 1024x1024 seçili değilse, tüm motor seçeneklerini etkinleştir
+    if (selectedEngine !== 'deepai' || selectedResolution !== '1024x1024') {
+        disableOption(engineSelector.find('option'), false);
+    }
+}
 
 	// İlk yükleme ve her değişiklikte seçenekleri güncelle
 	updateEngineAndResolutionOptions();
@@ -250,6 +266,10 @@ jQuery(document).ready(function ($) {
 		var imageCount = $("#postpix_image_count").val(); // Dropdown'dan alınan görsel sayısı
 		var engine = $("#engine").val();
 		var resolution = $("#resolution").val();
+		var aipstx_styles = [];
+		$('input[name="style[]"]:checked').each(function () {
+			aipstx_styles.push($(this).val());
+		});
 		$("#pv_images_container").html(
 			'<div class="loading-gif-container"><img src="' + aipstxParams.loadingGifUrl + '" alt="Loading..." /></div>');
 		$.ajax({
@@ -261,7 +281,8 @@ jQuery(document).ready(function ($) {
 				prompt: prompt,
 				image_count: imageCount, // Gönderilecek görsel sayısı
 				resolution: resolution, // Kullanıcının seçtiği çözünürlük
-				engine: engine
+				engine: engine,
+				style: aipstx_styles
 			},
 			success: function (response) {
 				$("#pv_images_container").empty();

@@ -24,18 +24,30 @@ if (!class_exists('\\AIPSTX\\AIPSTX_genimg')) {
         }
 
         public function aipstx_create_image() {
-            // Nonce kontrolü
-			if (!check_ajax_referer('aipstx_nonce', 'nonce', false)) {
-				wp_send_json_error(array('message' => 'Nonce verification failed.'));
-				return;
-			}
+            if (!check_ajax_referer('aipstx_nonce', 'nonce', false)) {
+                wp_send_json_error(array('message' => 'Nonce verification failed.'));
+                return;
+            }
+
+            if (!current_user_can('edit_posts')) {
+                wp_send_json_error('Unauthorized user');
+                wp_die();
+            }
 
             $prompt = isset($_POST['prompt']) ? sanitize_text_field($_POST['prompt']) : '';
 
-            // Prompt'un boş olup olmadığını kontrol et
             if (empty($prompt)) {
                 wp_send_json_error('Prompt cannot be empty. Please type a prompt in the Prompt for Images field.');
                 wp_die();
+            }
+
+            if (class_exists('\\AIPSTX\\AIPSTX_img_styles')) {
+                $aipstx_styles = aipstx_img_styles::get_instance()->aipstx_get_styles_from_post();
+                $aipstx_style_text = aipstx_img_styles::get_instance()->aipstx_process_styles($aipstx_styles);
+
+                if (!empty($aipstx_styles)) {
+                    $prompt = $aipstx_style_text . ' ' . $prompt;
+                }
             }
 
             $image_count = isset($_POST['image_count']) ? intval($_POST['image_count']) : 1;
@@ -49,19 +61,35 @@ if (!class_exists('\\AIPSTX\\AIPSTX_genimg')) {
                     wp_die();
                 }
 
-                // OpenAI DALL-E 3 için API isteği
                 $api_url = 'https://api.openai.com/v1/images/generations';
                 $args = array(
                     'method' => 'POST',
                     'timeout' => 90,
                     'headers' => array(
-                            'Content-Type' => 'application/json',
-                            'Authorization' => 'Bearer ' . $aipstx_openai_key
-                        ),
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $aipstx_openai_key
+                    ),
                     'body' => wp_json_encode(['prompt' => $prompt, 'n' => $image_count, 'size' => $resolution])
                 );
 
                 $response = wp_remote_post($api_url, $args);
+
+                if (is_wp_error($response)) {
+                    wp_send_json_error('Error creating images: ' . $response->get_error_message());
+                    wp_die();
+                }
+
+                $response_data = json_decode(wp_remote_retrieve_body($response), true);
+
+                if (isset($response_data['data'])) {
+                    $images = array_map(function ($item) {
+                        return $item['url'];
+                    }, $response_data['data']);
+
+                    wp_send_json_success($images);
+                } else {
+                    wp_send_json_error('Error retrieving images from OpenAI DALL-E 3.');
+                }
             } else {
                 $aipstx_edenai_key = get_option('aipstx_edenai_key');
                 if (empty($aipstx_edenai_key)) {
@@ -69,15 +97,14 @@ if (!class_exists('\\AIPSTX\\AIPSTX_genimg')) {
                     wp_die();
                 }
 
-                // Eden AI ve diğer sağlayıcılar için API isteği
                 $api_url = 'https://api.edenai.run/v2/image/generation';
                 $args = array(
                     'method' => 'POST',
                     'timeout' => 90,
                     'headers' => array(
-                            'Content-Type' => 'application/json',
-                            'Authorization' => 'Bearer ' . $aipstx_edenai_key
-                        ),
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $aipstx_edenai_key
+                    ),
                     'body' => wp_json_encode([
                         "response_as_dict" => true,
                         "attributes_as_list" => false,
@@ -90,53 +117,28 @@ if (!class_exists('\\AIPSTX\\AIPSTX_genimg')) {
                 );
 
                 $response = wp_remote_post($api_url, $args);
-            }
 
-            // Yanıtı işle
-            if (is_wp_error($response)) {
-                wp_send_json_error('Error creating images: ' . $response->get_error_message());
-                wp_die();
-            }
+                $response_body = wp_remote_retrieve_body($response);
 
-            $response_data = json_decode(wp_remote_retrieve_body($response), true);
-
-            // Başarılı yanıtı kontrol et ve görselleri döndür
-            if (isset($response_data[$engine]['status']) && $response_data[$engine]['status'] == 'success') {
-                switch ($engine) {
-                    case 'openai':
-                        $images = array_map(function ($item) {
-                            return $item['image_resource_url'];
-                        }, $response_data[$engine]['items']);
-                        break;
-
-                    case 'deepai':
-                        $images = array_map(function ($item) {
-                            return $item['image_resource_url'];
-                        }, $response_data[$engine]['items']);
-                        break;
-
-                    case 'stabilityai':
-                        $images = array_map(function ($item) {
-                            return $item['image_resource_url'];
-                        }, $response_data[$engine]['items']);
-                        break;
-
-                    case 'replicate':
-                        $images = array_map(function ($item) {
-                            return $item['image_resource_url'];
-                        }, $response_data[$engine]['items']);
-                        break;
-
-                    default:
-                        wp_send_json_error("Selected engine is not supported.");
-                        wp_die();
+                if (is_wp_error($response)) {
+                    wp_send_json_error('Error creating images: ' . $response->get_error_message());
+                    wp_die();
                 }
-                // Görselleri başarıyla döndür
-                wp_send_json_success($images);
-            } else {
-                wp_send_json_error('Error retrieving images');
+
+                $response_data = json_decode(wp_remote_retrieve_body($response), true);
+
+                // Dinamik olarak sağlayıcı adı kullanarak yanıtı işleme
+                if (!empty($response_data) && isset($response_data[$engine]) && isset($response_data[$engine]['status']) && $response_data[$engine]['status'] == 'success') {
+                    $images = array_map(function ($item) {
+                        return $item['image_resource_url'];
+                    }, $response_data[$engine]['items']);
+
+                    wp_send_json_success($images);
+                } else {
+                    wp_send_json_error('Error retrieving images from the selected engine.');
+                }
             }
-            // İşlemi sonlandır
+
             wp_die();
         }
 

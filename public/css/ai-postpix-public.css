@@ -163,6 +163,11 @@
   width: 50px;
 }
 
+.disabled-select, .disabled-option {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+}
+
 #aipstx_meta_box input[type="text"] {
   padding: 10px;
   width: 155px;

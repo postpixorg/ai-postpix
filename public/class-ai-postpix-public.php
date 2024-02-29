@@ -73,8 +73,6 @@ class AIPSTX_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/ai-postpix-public.css', array(), $this->version, 'all' );
-
 	}
 
 	/**
@@ -95,8 +93,6 @@ class AIPSTX_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/ai-postpix-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 

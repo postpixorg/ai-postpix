@@ -27,6 +27,8 @@ Introducing AI Postpix, an AI-powered visual assistant that redefines the conten
 - **Featured Image Setting** - Use the 'Set as Featured Image' function to instantly designate your selected visual as the leading image of your post.
 - **Library Save Function** - With just a click, you can save all your created visuals directly to your WordPress media library.
 - **PC Download Option** - Download and stockpile your favorite visuals directly to your computer with a simple click, giving you offline access and backup.
+- **[[PREMIUM]] Improve My Prompt** - Analyze and refine your written prompt to make it more detailed, offering you 5 improved prompt suggestions to elevate your visual creation process!
+- **[[PREMIUM]] Image Style Selection** – Choose from dozens of styles to make your visuals more captivating and to match your exact preferences.
 
 == Don't Know How to Write Prompts? No Problem! ==
 
@@ -87,14 +89,14 @@ AI Postpix is a plugin that allows users to use API services such as OpenAI's Ch
 4. Test the API keys using the 'Test My OpenAI API' and 'Test My EdenAI API' buttons.
 5. Go to the bottom of any finished blog post and choose an AI engine in the Ai Postpix section.
 6. Click 'Find Prompt' to generate a prompt or enter your own.
-7. Decide on the number of images, their resolution.
+7. Decide on the number of images, their resolution, and style.
 8. Click 'Create Images' to start the process.
 9. Add images to your post, set as featured images, save to the media library, or download to your PC. Or you can do it all at the same time!
  
 == Frequently Asked Questions ==
 
 = Is the AI Postpix plugin free? =
-The core features of our plugin are 100% free. If you have OpenAI and EdenAI API keys, you can use it for free.
+The core features of our plugin are 100% free. If you have OpenAI and EdenAI API keys, you can use it for free. But to use the 'Improve My Prompt' and 'Image Styles' section, you must upgrade to the Pro version.
 
 = Do I need an API Key? =
 Yes, you must have an OpenAI and EdenAI account, if you do not have an account, you must create one. Explained how to get an API key in the admin panel of the plugin.
@@ -116,6 +118,13 @@ Make sure that your API key is not missing or incorrect. If there is no problem 
 
 = How can I hide the AI Postpix meta box at any time? =
 Yes, you can hide it at any time by clicking on the up arrow icon in the right corner of the meta box.
+
+== Screenshots ==
+
+1. Settings
+2. Block Editor
+3. Classic Editor
+4. Generated Images
 
 == Changelog ==
 

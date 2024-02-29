@@ -47,6 +47,7 @@ if (!class_exists('\\AIPSTX\\AIPSTX_metabox')) {
 				</div>';
 				return; // Fonksiyonun geri kalanını çalıştırmamak için return kullan
 			}
+			$aipstx_img_styles = class_exists('\\AIPSTX\\AIPSTX_img_styles') ? aipstx_img_styles::get_instance()->aipstx_get_available_styles() : [];
 
 			?>
 			<div id="postpix-alert" class="postpix-alert" style="display:none;"></div>
@@ -55,7 +56,20 @@ if (!class_exists('\\AIPSTX\\AIPSTX_metabox')) {
 					<div class="pv_prompt_actions">
 						<button id="aipstx_find_prompt" class="button"><i class="fas fa-magic"></i>&nbsp;&nbsp;Find My
 							Prompt</button>
-					</div> <div class="prompt-area">
+						<?php
+						$is_aipstx_imp_available = class_exists('\\AIPSTX\\AIPSTX_improve');
+						?>
+						<button id="improve-prompt-button" class="button" <?php if (!$is_aipstx_imp_available)
+							echo 'disabled'; ?>>
+							<i class="fas fa-hat-wizard"></i>&nbsp;&nbsp;Improve My Prompt
+						</button>
+					</div><?php
+					if (!$is_aipstx_imp_available) {
+						if (aipstx_fs()->is_not_paying()) {
+							echo '<a href="' . esc_url(aipstx_fs()->get_upgrade_url()) . '" class="upgrade-link">' . esc_html__('Upgrade Now!', 'ai-postpix') . '</a>';
+						}
+					}
+					?> <div class="prompt-area">
 						<div class="prompt-container">
 							<label for="pv_prompt">Prompt for Images:</label>
 							<div id="pv_loading" style="display: none;">
@@ -107,6 +121,72 @@ if (!class_exists('\\AIPSTX\\AIPSTX_metabox')) {
 							<option value="1024x1024" selected>1024x1024</option>
 						</select>
 					</div>
+					<div class="style-options-container">
+						<div class="style-options-header">
+							<p>Image Styles:</p>
+						</div>
+						<div class="style-options" <?php if (empty($aipstx_img_styles))
+							echo 'style="position: relative;"'; ?>>
+							<?php
+							if (!empty($aipstx_img_styles)) {
+								// Premium içerik
+								$i = 0;
+								foreach ($aipstx_img_styles as $aipstx_style_key => $aipstx_style_label) {
+									// Her 8 stil için yeni bir style-column başlat
+									if ($i % 8 == 0) {
+										if ($i != 0) {
+											echo '</div>'; // Önceki style-column'ı kapat
+										}
+										echo '<div class="style-column">'; // Yeni bir style-column başlat
+									}
+									$label_text = ucwords(str_replace(['_', 'style'], ' ', $aipstx_style_key));
+									?>
+									<div class="checkbox-group">
+										<input type="checkbox" id="<?php echo esc_attr($aipstx_style_key); ?>" name="style[]"
+											value="<?php echo esc_attr($aipstx_style_label); ?>">
+										<label
+											for="<?php echo esc_attr($aipstx_style_key); ?>"><?php echo esc_html(trim($label_text)); ?></label>
+									</div>
+									<?php
+									$i++;
+									if ($i == count($aipstx_img_styles)) {
+										echo '</div>'; // Son style-column'ı kapat
+									}
+								}
+							} else {
+								// Ücretsiz içerik
+								for ($i = 0; $i < 40; $i++) {
+									if ($i % 8 == 0) {
+										echo '<div class="style-column">';
+									}
+									?>
+									<div class="checkbox-group">
+										<input type="checkbox" id="style_<?php echo esc_attr($i); ?>" name="style[]" value="upgrade_pro"
+											disabled>
+										<label for="style_<?php echo esc_attr($i); ?>">Upgrade Pro</label>
+									</div>
+									<?php
+									if (($i + 1) % 8 == 0 || $i == 7) {
+										echo '</div>'; // Her 8 stil sonrası veya son stil için style-column'ı kapat
+									}
+								}
+								?>
+								<div class="upgrade-area">
+									<?php
+									if (aipstx_fs()->is_not_paying()) {
+										echo '<a href="' . esc_url(aipstx_fs()->get_upgrade_url()) . '" class="upgrade-link-big">' . esc_html__('Upgrade Now!', 'ai-postpix') . '</a>';
+									}
+									?>
+
+								</div>
+								<?php
+							}
+							?>
+						</div>
+						<p> For the styles to work correctly, you must delete the style statements in your prompt (e.g.: a highly
+							detailed and realistic digital painting) </p>
+					</div>
+
 				</div>
 			</div>
 

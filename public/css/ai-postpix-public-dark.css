@@ -158,6 +158,16 @@
   width: 50px;
 }
 
+#postpix_image_count .disabled-select {
+    background-color: #000000;
+    color: #363636;
+}
+
+.disabled-select, .disabled-option {
+    background-color: #000000;
+    color: #363636;
+}
+
 #aipstx_meta_box input[type="text"] {
   padding: 10px;
   width: 155px;
