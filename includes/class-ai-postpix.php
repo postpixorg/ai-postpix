@@ -72,7 +72,7 @@ class aipstx
 		if (defined('AIPSTX_VERSION')) {
 			$this->version = AIPSTX_VERSION;
 		} else {
-			$this->version = '1.0.0';
+			$this->version = '1.0.1';
 		}
 		$this->plugin_name = 'ai-postpix';
 

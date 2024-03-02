@@ -63,7 +63,7 @@ if (!class_exists('\\AIPSTX\\AIPSTX_finder')) {
                     ),
                     'body' => wp_json_encode([
                         "providers" => "google",
-                        "text" => "Please analyze the following text and create a " . $engine . " prompt in English that will generate the most relevant and descriptive image that best summarizes the main topic and themes of the content. Text: " . $post_content
+                        "text" => "You are a prompt engineer. Your task is to carefully analyze the following text and create an English prompt for the " . $engine . " model, enabling the generation of a visual that matches the text. This prompt should concisely capture the essence, main themes, and nuances of the provided content, aiming to facilitate the creation of the most accurate and engaging image that reflects the main message and context without being overly complex or detailed. Text: " . $post_content
                     ])
                 );
             } else {
@@ -81,11 +81,11 @@ if (!class_exists('\\AIPSTX\\AIPSTX_finder')) {
                         "messages" => [
                             [
                                 "role" => "system",
-                                "content" => "You are a prompt engineer. You will be given a block of text and your task will be to create a " . $engine . " prompt to create a featured image that best fits this text."
+                                "content" => "You are a prompt engineer. Your task is to carefully analyze the following text and create an English prompt for the " . $engine . " model, enabling the generation of a visual that matches the text. This prompt should concisely capture the essence, main themes, and nuances of the provided content, aiming to facilitate the creation of the most accurate and engaging image that reflects the main message and context without being overly complex or detailed."
                             ],
                             [
                                 "role" => "user",
-                                "content" => $post_content
+                                "content" => "Text: " . $post_content
                             ]
                         ]
                     ])

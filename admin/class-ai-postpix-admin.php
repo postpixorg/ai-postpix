@@ -113,7 +113,7 @@ class AIPSTX_Admin {
 
 		$aipstx_edenai_key = isset($_POST['test_api']) ? sanitize_text_field($_POST['test_api']) : '';
 		$plugin_name = 'ai-postpix';  // Eklentinin adı
-		$version = '1.0.0';  // Eklentinin sürümü
+		$version = '1.0.1';  // Eklentinin sürümü
 		$test_result = (new aipstx_Admin($plugin_name, $version))->aipstx_test_edenai($aipstx_edenai_key);
 
 		if ($test_result) {
@@ -128,7 +128,7 @@ class AIPSTX_Admin {
 
 		$aipstx_openai_key = isset($_POST['aipstx_test_openai']) ? sanitize_text_field($_POST['aipstx_test_openai']) : '';
 		$plugin_name = 'ai-postpix';  // Eklentinin adı
-		$version = '1.0.0';  // Eklentinin sürümü
+		$version = '1.0.1';  // Eklentinin sürümü
 		$test_result = (new aipstx_Admin($plugin_name, $version))->aipstx_test_openai($aipstx_openai_key);
 
 		if ($test_result) {

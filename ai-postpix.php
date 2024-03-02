@@ -9,13 +9,13 @@
  * that starts the plugin.
  *
  * @link              https://postpix.org
- * @since             1.0.0
+ * @since             1.0.1
  * @package           Ai_Postpix
  *
  * @wordpress-plugin
- * Plugin Name:       AI Postpix: Let AI Find the Best Image Prompts for Your Posts and Create Images!
- * Description:       Analyze your post with AI technology to create the most compatible images, and generate perfect images using your choice of various AI models including DALL-E2, DALL-E3, DeepAI, Stable-Diffusion, and Replicate. Don't search for the best image for your content, generate it!
- * Version:           1.0.0
+ * Plugin Name:       AI Image Generator for Your Content & Featured Images - AI Postpix
+ * Description:       Let AI analyze your content and generate images that match your content! DALL-E, Stable-Diffusion, and more. No more searching for the best image for your content, generate images with AI Postpix!
+ * Version:           1.0.1
  * Author:            Dogu Pekgoz
  * Author URI:        https://postpix.org
  * License:           GPL-2.0+
@@ -32,7 +32,7 @@ if ( !defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'AIPSTX_VERSION', '1.0.0' );
+define( 'AIPSTX_VERSION', '1.0.1' );
 
 if ( function_exists( 'aipstx_fs' ) ) {
     aipstx_fs()->set_basename( false, __FILE__ );
@@ -60,7 +60,7 @@ if ( function_exists( 'aipstx_fs' ) ) {
                     'has_paid_plans' => true,
                     'menu'           => array(
                     'slug'    => 'ai-postpix',
-                    'support' => false,
+                    'support' => true,
                 ),
                     'is_live'        => true,
                 ) );
@@ -109,7 +109,7 @@ if ( function_exists( 'aipstx_fs' ) ) {
      * then kicking off the plugin from this point in the file does
      * not affect the page life cycle.
      *
-     * @since    1.0.0
+     * @since    1.0.1
      */
     function aipstx_run()
     {
